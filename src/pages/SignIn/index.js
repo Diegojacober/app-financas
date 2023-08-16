@@ -18,14 +18,14 @@ export default function SignIn() {
                 </S.AreaInput>
 
                 <S.AreaInput>
-                    <S.Input placeholder="Sua senha"/>
+                    <S.Input placeholder="Sua senha" secureTextEntry={true}/>
                 </S.AreaInput>
 
-                <S.SubmitButton activeOpacity={0.8} onPress={() => navigation.navigate('SignUp')}>
+                <S.SubmitButton activeOpacity={0.8}>
                     <S.SubmitText>Acessar</S.SubmitText>
                 </S.SubmitButton>
 
-                <S.Link>
+                <S.Link onPress={() => navigation.navigate('SignUp')}>
                     <S.LinkText>Criar uma nova conta</S.LinkText>
                 </S.Link>
             </S.Container>
