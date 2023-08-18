@@ -38,6 +38,7 @@ export default function AuthProvider({ children }) {
 
     async function signUp(name, email, password) {
         setLoadingAuth(true)
+        console.log(name, email, password)
         if (!name || !password || !email) {
             throw new Error("Required")
         }
@@ -54,6 +55,13 @@ export default function AuthProvider({ children }) {
                 setLoadingAuth(false)
                 console.log(e)
             })
+    }
+
+    async function signOut() {
+        await AsyncStorage.clear()
+        .then(() => {
+            setUser(null)
+        })
     }
 
     async function signIn(email, password) {
@@ -83,7 +91,7 @@ export default function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ signed: !!user, user, setUser, signUp, loadingAuth, signIn, loading }}>
+        <AuthContext.Provider value={{ signed: !!user, user, setUser, signUp, loadingAuth, signIn, signOut, loading }}>
             {children}
         </AuthContext.Provider>
     )
