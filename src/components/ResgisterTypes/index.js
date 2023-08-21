@@ -25,7 +25,7 @@ export default function ResgisterTypes({ type, sendTypeChanged }) {
 
             <RegisterTypeButton checked={ typeChecked === 'despesa' ? true : false } onPress={() => changeType('despesa')}>
                 <AntDesign name="arrowdown" size={25} color="#121212" />
-                <RegisterLabel>Receita</RegisterLabel>
+                <RegisterLabel>Despesa</RegisterLabel>
             </RegisterTypeButton>
         </RegisterContainer>
     )
