@@ -59,7 +59,20 @@ export default function Home() {
             isActive = false
         }
 
-    }, [isFocused])
+    }, [isFocused, dateMovements])
+
+
+    async function handelDelete(id) {
+        await api.delete('/receives/delete', {
+            params: {
+                item_id: id
+            }
+        })
+        .then(() => {
+            setDateMovements(new Date())
+        })
+        .catch(e => console.log(e))
+    }
 
 
 
@@ -78,7 +91,7 @@ export default function Home() {
             </Area>
 
             <List data={movements} keyExtractor={item => item.id} 
-            renderItem={({ item }) => <HistoricList data={item}/>}
+            renderItem={({ item }) => <HistoricList data={item} deleteItem={handelDelete}/>}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{paddingBottom:20}}
             />
