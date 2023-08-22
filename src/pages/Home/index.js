@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Modal, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../contexts/auth";
 import { Entypo } from '@expo/vector-icons';
 
@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { useIsFocused } from "@react-navigation/native";
 import BalanceItem from "../../components/BalanceItem";
 import HistoricList from "../../components/HistoricList";
+import CalendarModal from "../../components/CalendarModal";
 
 
 export default function Home() {
@@ -25,6 +26,8 @@ export default function Home() {
     const [dateMovements, setDateMovements] = useState(new Date())
 
     const [movements, setMovements] = useState([])
+
+    const [modalVisible, setModalVisible] = useState(false)
     
     const isFocused = useIsFocused();
 
@@ -32,7 +35,9 @@ export default function Home() {
         let isActive = true;
 
         async function getMovements() {
-            dateFormated = format(dateMovements, "dd/MM/yyyy")
+            let date = new Date(dateMovements)
+            let onlyDate = date.valueOf() + date.getTimezoneOffset() * 60 * 1000;
+            let dateFormated = format(onlyDate,  "dd/MM/yyyy")
 
             const receives = await api.get('/receives', {
                 params: {
@@ -74,6 +79,10 @@ export default function Home() {
         .catch(e => console.log(e))
     }
 
+    async function filterDateMovements(dateSelected) {
+        setDateMovements(dateSelected)
+    }
+
 
 
     return (
@@ -84,7 +93,7 @@ export default function Home() {
                 renderItem={({ item }) => (<BalanceItem data={item} />)} />
 
             <Area>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                     <Entypo name="calendar" size={30} color="#121212" />
                 </TouchableOpacity>
                 <Title>Ultimas movimentações</Title>
@@ -95,6 +104,16 @@ export default function Home() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{paddingBottom:20}}
             />
+
+            <Modal 
+            visible={modalVisible}
+            animationType="fade"
+            transparent={true}
+            >
+                <CalendarModal setVisible={() => setModalVisible(false)}
+                handleFilter={filterDateMovements}
+                />
+            </Modal>
         </Background>
     )
 }
